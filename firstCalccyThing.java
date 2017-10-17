@@ -36,7 +36,7 @@ public class firstCalccyThing {
 			else {
 				int fullcheck = 1;
 				for (int wholeCheck = 0; wholeCheck < listValsAndOps[numingEqualizer].length(); wholeCheck++) {
-					if (realNums.contains(listValsAndOps[numingEqualizer].substring(wholeCheck, ++wholeCheck))) {
+					if (realNums.contains(listValsAndOps[numingEqualizer].substring(wholeCheck, wholeCheck + 1))) {
 						fullcheck++;
 					}
 				}
@@ -66,11 +66,11 @@ public class firstCalccyThing {
 		for (int opperating = 0; opperating < LastProcessingList.length; opperating++) {
 			if (LastProcessingList[opperating].equals("*") || LastProcessingList[opperating].equals(" / ")) {
 				if (LastProcessingList[opperating].equals("*")) {
-					numFinishedANS = Integer.parseInt(LastProcessingList[--opperating]) * Integer.parseInt(LastProcessingList[++opperating]);
+					numFinishedANS = Integer.parseInt(LastProcessingList[opperating - 1]) * Integer.parseInt(LastProcessingList[opperating + 1]);
 				}
 				if (LastProcessingList[opperating].equals(" / ")) {
 					//issue at present please take note will not work due to truncation
-					numFinishedANS = Integer.parseInt(LastProcessingList[--opperating]) / Integer.parseInt(LastProcessingList[++opperating]);
+					numFinishedANS = Integer.parseInt(LastProcessingList[opperating - 1]) / Integer.parseInt(LastProcessingList[opperating + 1]);
 				}
 			}
 			// this is where you left off
@@ -82,14 +82,14 @@ public class firstCalccyThing {
 		String listAdderVal = "";
 		int listLength = 1;
 		for (int listdecide = 0; listdecide < calcing.length(); listdecide++) {
-			if (validOperator.contains(calcing.substring(listdecide, ++listdecide))) {
+			if (validOperator.contains(calcing.substring(listdecide, listdecide + 1))) {
 				listLength += 2;
 			}
 		}
 		String[] allThingsList = new String[listLength];
 		int listIndexNum = 0;
 		for (int addingToList = 0; addingToList < calcing.length(); addingToList++) {
-			if (realNums.contains(calcing.substring(addingToList, ++addingToList))) {
+			if (realNums.contains(calcing.substring(addingToList, addingToList + 1))) {
 				listAdderVal += calcing.charAt(addingToList);
 			}
 			else if (calcing.charAt(addingToList) == '_') {
