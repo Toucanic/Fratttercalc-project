@@ -21,20 +21,24 @@ public class firstCalccyThing {
 		int DenomEqualizer = 1;
 		int count = 0;
 		for (String calcingPeice: listValsAndOps) {
-			if (calcingPeice.substring(0, 5).contains("denom")) {
-				DenomEqualizer *= Integer.parseInt(calcingPeice.substring(5, calcingPeice.length()));
-				count++;
+			if (calcingPeice.length() > 5) {
+				if (calcingPeice.substring(0, 5).contains("denom")) {
+					DenomEqualizer *= Integer.parseInt(calcingPeice.substring(5, calcingPeice.length()));
+					count++;
+				}
 			}
 		}
 		// should give all fractions a common denimonator
 		for (int numingEqualizer = 0; numingEqualizer < listValsAndOps.length; numingEqualizer++) {
-			if (listValsAndOps[numingEqualizer].substring(0, 5).contains("numor")) {
-				int workingVal = Integer.parseInt(listValsAndOps[numingEqualizer].substring(5, listValsAndOps[numingEqualizer].length())) 
-						* (DenomEqualizer / Integer.parseInt(listValsAndOps[numingEqualizer + 2].substring(5, listValsAndOps[numingEqualizer + 2].length())));
-				listValsAndOps[numingEqualizer] = "" + workingVal;
+			if (listValsAndOps[numingEqualizer].length() > 5) {
+				if (listValsAndOps[numingEqualizer].substring(0, 5).contains("numer")) {
+					int workingVal = Integer.parseInt(listValsAndOps[numingEqualizer].substring(5, listValsAndOps[numingEqualizer].length())) 
+							* (DenomEqualizer / Integer.parseInt(listValsAndOps[numingEqualizer + 2].substring(5, listValsAndOps[numingEqualizer + 2].length())));
+					listValsAndOps[numingEqualizer] = "" + workingVal;
+				}
 			}
 			else {
-				int fullcheck = 1;
+				int fullcheck = 0;
 				for (int wholeCheck = 0; wholeCheck < listValsAndOps[numingEqualizer].length(); wholeCheck++) {
 					if (realNums.contains(listValsAndOps[numingEqualizer].substring(wholeCheck, wholeCheck + 1))) {
 						fullcheck++;
@@ -49,20 +53,28 @@ public class firstCalccyThing {
 		// should give the final ans
 		int numoratorAndOpperandListLength = 0;
 		for (String calcingPeice: listValsAndOps) {
-			if (calcingPeice.substring(0, 5).contains("denom")) {
-				numoratorAndOpperandListLength++;
+			if (calcingPeice.length() > 5) {
+				if (calcingPeice.substring(0, 5).contains("denom")) {
+					numoratorAndOpperandListLength++;
+				}
 			}
 			else if (calcingPeice.equals("/")) {
 				numoratorAndOpperandListLength++;
 			}
 		}
 		String[] LastProcessingList = new String[listValsAndOps.length - numoratorAndOpperandListLength];
-		int numFinishedANS = 0;
 		for (int orderedListnums = 0; orderedListnums < listValsAndOps.length; orderedListnums++) {
-			if (!listValsAndOps[orderedListnums].substring(0, 5).contains("denom") && !listValsAndOps[orderedListnums].equals("/")) {
-				LastProcessingList[orderedListnums] = listValsAndOps[orderedListnums];
-			}
+				if (!listValsAndOps[orderedListnums].contains("denom") && !listValsAndOps[orderedListnums].equals("/")) {
+					LastProcessingList[orderedListnums] = listValsAndOps[orderedListnums];
+				}
+				if (realNums.contains(LastProcessingList[orderedListnums].substring(0, 1)) && orderedListnums > 0) {
+					if (realNums.contains(LastProcessingList[orderedListnums - 1].substring(0, 1))) {
+						LastProcessingList[orderedListnums] += LastProcessingList[orderedListnums - 1];
+						LastProcessingList[orderedListnums - 1] = LastProcessingList[orderedListnums];
+					}
+				}
 		}
+		int numFinishedANS = 0;
 		for (int opperating = 0; opperating < LastProcessingList.length; opperating++) {
 			if (LastProcessingList[opperating].equals("*") || LastProcessingList[opperating].equals(" / ")) {
 				if (LastProcessingList[opperating].equals("*")) {
@@ -73,9 +85,18 @@ public class firstCalccyThing {
 					numFinishedANS = Integer.parseInt(LastProcessingList[opperating - 1]) / Integer.parseInt(LastProcessingList[opperating + 1]);
 				}
 			}
+			else if (LastProcessingList[opperating].equals("+") || LastProcessingList[opperating].equals("-")) {
+				if (LastProcessingList[opperating].equals("-")) {
+					numFinishedANS = Integer.parseInt(LastProcessingList[opperating - 1]) - Integer.parseInt(LastProcessingList[opperating + 1]);
+				}
+				if (LastProcessingList[opperating].equals("+")) {
+					//issue at present please take note will not work due to truncation
+					numFinishedANS = Integer.parseInt(LastProcessingList[opperating - 1]) + Integer.parseInt(LastProcessingList[opperating + 1]);
+				}
+			}
 			// this is where you left off
 		}
-		
+		finishedANS = numFinishedANS + "/" + DenomEqualizer;
 		return finishedANS;
 	}
 	public static String[] convertTOList(String calcing) {
