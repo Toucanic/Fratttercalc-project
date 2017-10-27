@@ -72,10 +72,11 @@ public static final char[] realNums = {'0', '1', '2', '3', '4', '5', '6', '7', '
 			String fracAndOppOrg;
 			String workingNumer;
 			for (int i = 0; i < orginalEquation.length(); i++) {
-				if (orginalEquation.charAt(i) == ' ') {
+				if (orginalEquation.charAt(i) == ' ' || orginalEquation.length() - 1 == i) {
 					if (orginalEquation.length() - 1 == i) {
+						leftside += orginalEquation.charAt(i);
 						workingNumer = leftside;
-						fracAndOppOrg = "n" + workingNumer + "f" + 1 + "d " + orginalEquation.charAt(++i) + " ";
+						fracAndOppOrg = "n" + workingNumer + "f" + 1 + "d";
 					}
 					else {
 						workingNumer = leftside;
@@ -89,7 +90,7 @@ public static final char[] realNums = {'0', '1', '2', '3', '4', '5', '6', '7', '
 					workingNumer = leftside;
 					i++;
 					while (i < orginalEquation.length())	{
-						if (orginalEquation.charAt(i) == ' ' || orginalEquation.length() - 1 == i) {
+						if (orginalEquation.charAt(i) == ' ') {
 							if (orginalEquation.length() - 1 == i) {
 								denominatorOrg += orginalEquation.charAt(i);
 								fracAndOppOrg = "n" + workingNumer + "f" + denominatorOrg + "d ";
@@ -119,6 +120,9 @@ public static final char[] realNums = {'0', '1', '2', '3', '4', '5', '6', '7', '
 	
 	// Changing now to a list based format
 	public static String evalList(String standardEQ) {
+		for(int i = 0; i < standardEQ.length(); ) {
+			
+		}
 		return standardEQ;
 	}
 
