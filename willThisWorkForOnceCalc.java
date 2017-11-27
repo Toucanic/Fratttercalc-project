@@ -8,13 +8,13 @@ public class willThisWorkForOnceCalc {
 	public static int arrayoppCount = 0;
 
 	public static void main(String[] args) {
-		String checkquit = "";
-		while (!checkquit.equals("quit")) {
+		while (true) {
 			Scanner lineRead = new Scanner(System.in);
-			String OGeq = lineRead.nextLine(); 
+			String OGeq = lineRead.nextLine();
+			if (OGeq.equals("quit"))
+				break;
 			produceAnswer(OGeq);
 			System.out.println(produceAnswer(OGeq));
-			checkquit = OGeq;
 		}
 		/*int [][] valArray = array_afi(OGeq);
 		char [][] opperators = oppArraying(OGeq);
@@ -36,14 +36,11 @@ public class willThisWorkForOnceCalc {
 		int [][] valArray = array_afi(OGeq);
 		char [][] opperators = oppArraying(OGeq);
 		Arrays.deepToString(valArray);
-		Arrays.deepToString(ValsToMixFrac(valArray));
 		Arrays.deepToString(opperators);
-		String[][] infixNotation = prePolishNotation(ValsToMixFrac(valArray), opperators);
-		Arrays.deepToString(infixNotation);
 		betterPrePN(opperators);
 		infixToPostfix(betterPrePN(opperators));
 		String endFracUnSimiple = CalculatingTooTheEnd(infixToPostfix(betterPrePN(opperators)), ValsToMixFrac(valArray));
-		simplify(endFracUnSimiple);
+		System.out.println(simplify(endFracUnSimiple));
 		return simplify(endFracUnSimiple); 
 	}
 	
@@ -51,7 +48,20 @@ public class willThisWorkForOnceCalc {
 		int center = mixfraction.indexOf('/');
 		int a = Integer.parseInt(mixfraction.substring(0, center));
 		int b = Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()));
+		boolean absVal = false;
+		boolean Valbissue = false;
 		int t;
+		if ((a<0 && b<0) || (a>0 && b>0))
+			absVal = true;
+		// absolute val statement
+		else if (a<0 && b>0) {
+			a=-a;
+		}
+		else if (b<0 && a>0) {
+			b=-b;
+			Valbissue = true;
+		}
+		// gcd() function
 		int lowestdDenom = 1;
 		if (a < b) {
 			while (a != 0) {
@@ -74,12 +84,14 @@ public class willThisWorkForOnceCalc {
 		
 		int wholeNum = (Integer.parseInt(mixfraction.substring(0, center))/lowestdDenom) / (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
 		int numer = (Integer.parseInt(mixfraction.substring(0, center))/lowestdDenom) % (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
-		if (wholeNum != 0 && wholeNum < 0)
-			return wholeNum + "_" + (-numer) + "/" + (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
-		else if (numer == 0)
+		if (numer == 0)
 			return wholeNum +"";
-		else if (wholeNum != 0)
-			return wholeNum + "_" + numer + "/" + (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
+		else if (absVal && wholeNum != 0)
+			return Math.abs(wholeNum) + "_" + Math.abs(numer) + "/" + Math.abs(Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
+		else if (wholeNum != 0 && (wholeNum < 0 && numer < 0))
+			return wholeNum + "_" + (-numer) + "/" + (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
+		else if (wholeNum != 0 && (wholeNum < 0) && Valbissue)
+			return wholeNum + "_" + (numer) + "/" + Math.abs(Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
 		else
 			return numer + "/" + (Integer.parseInt(mixfraction.substring(center + 1, mixfraction.length()))/lowestdDenom);
 	}
@@ -131,6 +143,8 @@ public class willThisWorkForOnceCalc {
 	}
 
 	public static String CalculatingTooTheEnd(String RPNeq, int[][] referenceFracs) {
+		if ("a".contains(RPNeq))
+			return referenceFracs[ReferenceLetter('a')][0] + "/" + referenceFracs[ReferenceLetter('a')][1];
 		Stack<int[]> LastFractionHolder = new Stack<int[]>();
 		int[] val1;
 		int[] val2;
@@ -179,6 +193,8 @@ public class willThisWorkForOnceCalc {
 		char[] letterPull = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		String futureInput = "a";
 		int count = 0;
+		if (opperators.length == 0)
+			return futureInput;
 		while(count < opperators[0].length) {
 			futureInput += opperators[0][count];
 			count++;
@@ -265,6 +281,7 @@ public class willThisWorkForOnceCalc {
 	}
 	
 	public static int[][] array_afi(String eq) {
+		arrayoppCount = 0;
 		// this determines the length of the array 
 		Scanner eqRead = new Scanner(eq);
 		int arrayValCount = 0;
